@@ -1,9 +1,9 @@
 const TodoService = require("../services/todo.service");
 const TodoController = {};
 
-TodoController.getAllTodos = (req, res) => {
+TodoController.getAllTodos = async (req, res) => {
   try {
-    const todos = TodoService.getAllTodos();
+    const todos = await TodoService.getAllTodos();
     res.status(200).json({
       todos: todos
     });

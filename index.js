@@ -3,7 +3,13 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const rfs = require('rotating-file-stream');
+const path = require('path');
+
+import connectDatabase from './src/configs/db.config';
 dotenv.config();
+
+connectDatabase();
 
 const port = process.env.PORT || 3333;
 const isProduction = process.env.NODE_ENV === "production";
@@ -11,9 +17,9 @@ const app = express();
 
 app.use(helmet());
 
-const accessLogStream = rfs("access.log", {
+const accessLogStream = rfs.createStream("access.log", {
   interval: "1d",
-  path: join(__dirname, "log")
+  path: path.join(__dirname, "log")
 });
 app.use(
   isProduction ? morgan("combined", { stream: accessLogStream }) : morgan("dev")
